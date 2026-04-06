@@ -1,10 +1,50 @@
 <template>
   <UPage>
     <UPageBody>
-      <UPageHero
-        title="Death Maze 2044"
-        description="A real-time cooperative survival prototype where your squad navigates a hostile megastructure, drops into deterministic initiative combat, and races to override the nexus core."
-      />
+      <section class="dm-vibe-surface rounded-3xl border border-white/10 p-6 md:p-10">
+        <p class="dm-kicker">Live Transmission</p>
+        <h1 class="dm-heading text-4xl md:text-6xl">Death Maze 2044</h1>
+        <p class="mt-4 max-w-3xl text-base leading-relaxed text-neutral-200/90 md:text-lg">
+          A real-time cooperative survival prototype where your squad maps a hostile megastructure,
+          survives deterministic initiative combat, and races to override the nexus core.
+        </p>
+
+        <div class="dm-crawl-shell mt-8" @mouseenter="isCrawlPaused = true" @mouseleave="isCrawlPaused = false">
+          <div
+            :key="crawlReplaySeed"
+            class="dm-crawl-track"
+            :class="{
+              'is-paused': isCrawlPaused,
+              'is-reduced-motion': prefersReducedMotion,
+            }"
+          >
+            <p
+              v-for="(line, lineIndex) in heroCrawlLines"
+              :key="`crawl-line-${lineIndex}`"
+              class="dm-crawl-line"
+            >
+              {{ line }}
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          <UButton
+            color="neutral"
+            variant="soft"
+            icon="i-lucide-pause"
+            @click="isCrawlPaused = !isCrawlPaused"
+          >
+            {{ isCrawlPaused ? 'Resume crawl' : 'Pause crawl' }}
+          </UButton>
+          <UButton color="neutral" variant="ghost" icon="i-lucide-rotate-ccw" @click="replayCrawl">
+            Replay intro
+          </UButton>
+          <UButton to="/story" color="primary" icon="i-lucide-scroll-text">
+            Read full transmission
+          </UButton>
+        </div>
+      </section>
       <UPageSection
         title="Core Loop"
         description="Scout the maze, secure signal fragments, breach network locks, and survive combat rounds long enough to reach extraction."
@@ -20,6 +60,33 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, onUnmounted, ref } from 'vue'
+import { heroCrawlLines } from '~/content/story'
+
+const isCrawlPaused = ref(false)
+const crawlReplaySeed = ref(0)
+const prefersReducedMotion = ref(false)
+let reducedMotionQuery: MediaQueryList | null = null
+
+const replayCrawl = (): void => {
+  crawlReplaySeed.value += 1
+  isCrawlPaused.value = false
+}
+
+onMounted(() => {
+  reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+  prefersReducedMotion.value = reducedMotionQuery.matches
+  reducedMotionQuery.addEventListener('change', handleReducedMotionChange)
+})
+
+onUnmounted(() => {
+  reducedMotionQuery?.removeEventListener('change', handleReducedMotionChange)
+})
+
+const handleReducedMotionChange = (event: MediaQueryListEvent): void => {
+  prefersReducedMotion.value = event.matches
+}
+
 const coreLoop = [
   {
     icon: 'i-lucide-radar',

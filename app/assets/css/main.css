@@ -1,2 +1,220 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+
+:root {
+	--dm-crawl-bg-top: #0b0e0d;
+	--dm-crawl-bg-bottom: #1a130c;
+	--dm-crawl-text: #f4d9a6;
+	--dm-crawl-accent: #b38a4a;
+	--dm-crawl-fog: rgb(107 90 61 / 0.2);
+	--dm-crawl-glow: rgb(179 138 74 / 0.35);
+}
+
+.dm-vibe-surface {
+	position: relative;
+	overflow: hidden;
+	background:
+		radial-gradient(circle at 20% 25%, var(--dm-crawl-fog), transparent 48%),
+		linear-gradient(180deg, var(--dm-crawl-bg-top) 0%, var(--dm-crawl-bg-bottom) 100%);
+	box-shadow:
+		inset 0 1px 0 rgb(255 255 255 / 0.04),
+		inset 0 -36px 60px rgb(0 0 0 / 0.35),
+		0 24px 60px rgb(0 0 0 / 0.35);
+}
+
+.dm-vibe-surface::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background:
+		repeating-linear-gradient(
+			to bottom,
+			rgb(255 255 255 / 0.02) 0,
+			rgb(255 255 255 / 0.02) 1px,
+			transparent 1px,
+			transparent 4px
+		),
+		radial-gradient(circle at 50% -12%, rgb(0 0 0 / 0), rgb(0 0 0 / 0.58) 75%);
+	mix-blend-mode: soft-light;
+}
+
+.dm-kicker {
+	position: relative;
+	z-index: 1;
+	display: inline-flex;
+	margin-bottom: 0.75rem;
+	padding: 0.15rem 0.65rem;
+	border: 1px solid rgb(255 255 255 / 0.15);
+	border-radius: 999px;
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: rgb(255 238 214 / 0.88);
+}
+
+.dm-heading {
+	position: relative;
+	z-index: 1;
+	font-family: "Bebas Neue", "Oswald", "Arial Narrow", sans-serif;
+	letter-spacing: 0.06em;
+	line-height: 0.95;
+	color: rgb(251 228 186 / 0.98);
+	text-wrap: balance;
+}
+
+.dm-crawl-shell {
+	position: relative;
+	z-index: 1;
+	height: min(49vh, 420px);
+	overflow: hidden;
+	border: 1px solid rgb(255 255 255 / 0.12);
+	border-radius: 1rem;
+	background:
+		linear-gradient(180deg, rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.55)),
+		linear-gradient(180deg, rgb(46 31 18 / 0.35), rgb(0 0 0 / 0.3));
+}
+
+.dm-crawl-shell::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background: linear-gradient(180deg, rgb(0 0 0 / 0.7) 0%, transparent 24%, transparent 66%, rgb(0 0 0 / 0.82) 100%);
+}
+
+.dm-crawl-track {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.8rem;
+	justify-content: flex-start;
+	align-items: center;
+	padding: 58% 1.5rem 0;
+	transform-origin: 50% 100%;
+	transform: perspective(560px) rotateX(24deg) translateY(32%);
+	animation: dm-crawl-scroll 42s linear forwards;
+	will-change: transform, opacity;
+}
+
+.dm-crawl-track.is-paused {
+	animation-play-state: paused;
+}
+
+.dm-crawl-shell:hover .dm-crawl-track {
+	animation-play-state: paused;
+}
+
+.dm-crawl-track.is-reduced-motion {
+	position: static;
+	transform: none;
+	animation: none;
+	align-items: flex-start;
+	gap: 0.75rem;
+	max-height: 100%;
+	overflow-y: auto;
+	padding: 1.5rem 1.2rem;
+}
+
+.dm-crawl-line {
+	max-width: 34ch;
+	margin: 0;
+	text-align: center;
+	font-family: "IBM Plex Sans Condensed", "Segoe UI", sans-serif;
+	font-size: clamp(1.02rem, 2.15vw, 1.4rem);
+	font-weight: 500;
+	letter-spacing: 0.04em;
+	line-height: 1.52;
+	color: var(--dm-crawl-text);
+	text-shadow: 0 0 10px var(--dm-crawl-glow);
+}
+
+.dm-crawl-track.is-reduced-motion .dm-crawl-line {
+	max-width: 62ch;
+	text-align: left;
+}
+
+.dm-story-divider {
+	height: 1px;
+	background: linear-gradient(90deg, transparent, rgb(179 138 74 / 0.8), transparent);
+}
+
+.dm-story-flow {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.dm-story-paragraph {
+	margin: 0;
+	font-family: "IBM Plex Sans Condensed", "Segoe UI", sans-serif;
+	font-size: clamp(1.02rem, 1.6vw, 1.16rem);
+	font-weight: 450;
+	line-height: 1.72;
+	letter-spacing: 0.014em;
+	color: rgb(245 228 198 / 0.94);
+}
+
+@keyframes dm-crawl-scroll {
+	0% {
+		transform: perspective(560px) rotateX(24deg) translateY(30%);
+		opacity: 1;
+	}
+
+	60% {
+		opacity: 1;
+	}
+
+	100% {
+		transform: perspective(560px) rotateX(24deg) translateY(-180%);
+		opacity: 0.08;
+	}
+}
+
+@media (max-width: 768px) {
+	.dm-crawl-shell {
+		height: min(52vh, 380px);
+	}
+
+	.dm-crawl-track {
+		padding-top: 70%;
+		transform: perspective(520px) rotateX(18deg) translateY(22%);
+		animation-duration: 34s;
+	}
+
+	@keyframes dm-crawl-scroll {
+		0% {
+			transform: perspective(520px) rotateX(18deg) translateY(24%);
+			opacity: 1;
+		}
+
+		60% {
+			opacity: 1;
+		}
+
+		100% {
+			transform: perspective(520px) rotateX(18deg) translateY(-164%);
+			opacity: 0.08;
+		}
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.dm-crawl-track {
+		position: static;
+		transform: none;
+		animation: none;
+		align-items: flex-start;
+		gap: 0.75rem;
+		max-height: 100%;
+		overflow-y: auto;
+		padding: 1.5rem 1.2rem;
+	}
+
+	.dm-crawl-line {
+		max-width: 62ch;
+		text-align: left;
+	}
+}
