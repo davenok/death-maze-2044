@@ -9,22 +9,23 @@
           survives deterministic initiative combat, and races to override the nexus core.
         </p>
 
-        <div class="dm-crawl-shell mt-8" @mouseenter="isCrawlPaused = true" @mouseleave="isCrawlPaused = false">
-          <div
-            :key="crawlReplaySeed"
-            class="dm-crawl-track"
-            :class="{
-              'is-paused': isCrawlPaused,
-              'is-reduced-motion': prefersReducedMotion,
-            }"
-          >
-            <p
-              v-for="(line, lineIndex) in heroCrawlLines"
-              :key="`crawl-line-${lineIndex}`"
-              class="dm-crawl-line"
+        <div class="dm-crawl-shell mt-8">
+          <div class="dm-crawl-stage">
+            <div
+              :key="crawlReplaySeed"
+              class="dm-crawl-track"
+              :class="{
+                'is-paused': isCrawlPaused,
+              }"
             >
-              {{ line }}
-            </p>
+              <p
+                v-for="(line, lineIndex) in heroCrawlLines"
+                :key="`crawl-line-${lineIndex}`"
+                class="dm-crawl-line"
+              >
+                {{ line }}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -60,31 +61,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { ref } from 'vue'
 import { heroCrawlLines } from '~/content/story'
 
 const isCrawlPaused = ref(false)
 const crawlReplaySeed = ref(0)
-const prefersReducedMotion = ref(false)
-let reducedMotionQuery: MediaQueryList | null = null
 
 const replayCrawl = (): void => {
   crawlReplaySeed.value += 1
   isCrawlPaused.value = false
-}
-
-onMounted(() => {
-  reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-  prefersReducedMotion.value = reducedMotionQuery.matches
-  reducedMotionQuery.addEventListener('change', handleReducedMotionChange)
-})
-
-onUnmounted(() => {
-  reducedMotionQuery?.removeEventListener('change', handleReducedMotionChange)
-})
-
-const handleReducedMotionChange = (event: MediaQueryListEvent): void => {
-  prefersReducedMotion.value = event.matches
 }
 
 const coreLoop = [
