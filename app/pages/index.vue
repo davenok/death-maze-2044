@@ -5,8 +5,9 @@
         <p class="dm-kicker">Live Transmission</p>
         <h1 class="dm-heading text-4xl md:text-6xl">Death Maze 2044</h1>
         <p class="mt-4 max-w-3xl text-base leading-relaxed text-neutral-200/90 md:text-lg">
-          A real-time cooperative survival prototype where your squad maps a hostile megastructure,
-          survives deterministic initiative combat, and races to override the nexus core.
+          A real-time multiploayer survival game. Survive the horrors within the maze long
+          enough to escape, or meet your expected death. Real Time exploration with hybrid
+          turn based combat.
         </p>
 
         <div class="dm-crawl-shell mt-8">
@@ -47,8 +48,9 @@
         </div>
       </section>
       <UPageSection
-        title="Core Loop"
-        description="Scout the maze, secure signal fragments, breach network locks, and survive combat rounds long enough to reach extraction."
+        title="The maze"
+        description="Scout the maze, secure signal fragments, breach network locks, and survive 
+        combat rounds long enough to find and unlock the exit. or die trying."
         :features="coreLoop"
       />
       <UPageSection
